@@ -1,13 +1,11 @@
 package com.niklas.generators.methods;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.lang.model.element.Modifier;
 
 import com.niklas.model.FieldMetadata;
 import com.niklas.model.TestBuilderModel;
-import com.palantir.javapoet.CodeBlock;
 import com.palantir.javapoet.MethodSpec;
 import org.apache.commons.lang3.StringUtils;
 
