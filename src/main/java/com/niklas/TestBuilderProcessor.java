@@ -1,8 +1,10 @@
 package com.niklas;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -16,6 +18,7 @@ import javax.annotation.processing.SupportedSourceVersion;
 import javax.lang.model.SourceVersion;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.TypeElement;
+import javax.tools.Diagnostic;
 
 import com.google.auto.service.AutoService;
 import com.niklas.generators.fields.FieldSpecGenerator;
@@ -65,8 +68,24 @@ public class TestBuilderProcessor extends AbstractProcessor {
                 .getOrDefault("testbuilder.resources", "src/main/resources/TestBuilders");
         Path yamlFile = Paths.get(resourceDirectory, model.className() + ".yaml");
 
-        YamlReader yamlReader = new YamlReader(processingEnv, model.className());
-        Map<String, Object> defaults = yamlReader.getDefaults(yamlFile);
+        Map<String, Object> defaults = new HashMap<>();
+
+        if(Files.exists(yamlFile)) {
+            YamlReader yamlReader = new YamlReader();
+            defaults = yamlReader.getDefaults(yamlFile);
+        } else {
+            processingEnv.getMessager().printMessage(
+                    Diagnostic.Kind.WARNING,
+                    String.format(
+                            """
+                            Missing defaults .yaml file for annotated class: %s - no default values will be applied.
+                            Expected a file at: %s
+                            To use a different directory, pass -Atestbuilder.resources=<path> to the annotation processor.
+                            """,
+                            model.className(), yamlFile.toAbsolutePath()
+                    )
+            );
+        }
 
         TestBuilderClassAssembler assembler = new TestBuilderClassAssembler(
                 new FieldSpecGenerator(),
