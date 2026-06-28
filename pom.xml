@@ -6,21 +6,10 @@
     <modelVersion>
         4.0.0
     </modelVersion>
-    <parent>
-        <groupId>
-            com.niklas
-        </groupId>
-        <artifactId>
-            TestBuilderAnnotation
-        </artifactId>
-        <version>
-            1.0-SNAPSHOT
-        </version>
-    </parent>
-
-    <artifactId>
-        AnnotationModule
-    </artifactId>
+    <groupId>com.niklas</groupId>
+    <artifactId>AnnotationModule</artifactId>
+    <version>0.0.1</version>
+    <packaging>jar</packaging>
 
     <properties>
         <maven.compiler.source>
